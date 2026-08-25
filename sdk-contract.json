@@ -1,0 +1,55 @@
+{
+  "schema": "myvocal.single-wss-sdk-contract.v1",
+  "version": "1.0.1",
+  "endpoint": "wss://api.voicelibrary.co/enterprise/v1/tts/{voice_id}/websocket",
+  "header": "api-key",
+  "models": [
+    "flash_v2_5",
+    "multilingual_v2"
+  ],
+  "priority": "dedicated_concurrency",
+  "formats": [
+    "mp3_44100_64",
+    "mp3_44100_96",
+    "mp3_44100_128",
+    "mp3_44100_192",
+    "pcm_8000",
+    "pcm_16000",
+    "pcm_22050",
+    "pcm_24000",
+    "pcm_44100",
+    "ulaw_8000"
+  ],
+  "idle_timeout": {
+    "minimum": 1,
+    "maximum": 180
+  },
+  "seed": {
+    "minimum": 0,
+    "maximum": 4294967295
+  },
+  "voice_setting_range": {
+    "minimum": 0,
+    "maximum": 1
+  },
+  "finish_message": {
+    "text": ""
+  },
+  "flush_message": {
+    "text": "",
+    "flush": true
+  },
+  "final_aliases": [
+    "isFinal",
+    "is_final"
+  ],
+  "timestamp_aliases": [
+    "timestamps",
+    "alignment",
+    "normalizedAlignment",
+    "normalized_alignment"
+  ],
+  "one_connection_per_transaction": true,
+  "automatic_replay": false,
+  "callback_queue_capacity": 256
+}
