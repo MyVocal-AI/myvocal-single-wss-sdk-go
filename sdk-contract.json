@@ -1,6 +1,6 @@
 {
   "schema": "myvocal.single-wss-sdk-contract.v1",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "endpoint": "wss://api.voicelibrary.co/enterprise/v1/tts/{voice_id}/websocket",
   "header": "api-key",
   "models": [
@@ -50,6 +50,5 @@
     "normalized_alignment"
   ],
   "one_connection_per_transaction": true,
-  "automatic_replay": false,
-  "callback_queue_capacity": 256
+  "automatic_replay": false
 }

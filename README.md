@@ -1,35 +1,62 @@
-# MyVocal Single WSS SDK for Go
+# MyVocal Single Connection TTS SDK for Go
 
-Go 1.20+ client for one enterprise Single WebSocket TTS transaction per
-connection.
+Requires Go 1.20 or later, an enterprise TTS API Key with dedicated concurrency, and a voice ID. Each connection handles one synthesis transaction.
 
 ## Install
 
+From your application's Go module:
+
 ```bash
-go get github.com/MyVocal-AI/myvocal-single-wss-sdk-go@v1.0.1
+go get github.com/MyVocal-AI/myvocal-single-wss-sdk-go@v1.0.2
 ```
 
-To use the delivery ZIP instead, extract it and run:
+To use the [downloadable ZIP](https://github.com/MyVocal-AI/myvocal-single-wss-sdk-go/releases/tag/v1.0.2), extract it beside your application and add the following to your application's `go.mod`:
+
+```go
+require github.com/MyVocal-AI/myvocal-single-wss-sdk-go v1.0.2
+
+replace github.com/MyVocal-AI/myvocal-single-wss-sdk-go => ../myvocal-single-wss-sdk-go-1.0.2
+```
+
+Adjust the relative path to the extracted folder and run `go mod tidy`.
+
+## Models and audio
+
+Supported models: `flash_v2_5` and `multilingual_v2`. The example uses `flash_v2_5` with `pcm_16000`; edit its connection options to use another supported model or format.
+
+`myvocal_v4` and `myvocal_v3_turbo` require the [dialogue SDKs](https://api-docs.myvocal.ai/3892090w0) and are not supported by this endpoint.
+
+## Run the example
+
+Set your Key and voice ID:
 
 ```bash
-go test ./...
+export MYVOCAL_TTS_API_KEY='YOUR_API_KEY'
+export MYVOCAL_TTS_VOICE_ID='YOUR_VOICE_ID'
+```
+
+PowerShell:
+
+```powershell
+$env:MYVOCAL_TTS_API_KEY='YOUR_API_KEY'
+$env:MYVOCAL_TTS_VOICE_ID='YOUR_VOICE_ID'
+```
+
+From the extracted SDK folder:
+
+```bash
 go run ./examples/basic
 ```
 
-## Lifecycle
+Running the example makes a real synthesis request and consumes character usage. It reports audio byte counts; add file or playback handling to consume the audio.
 
-```text
-Connect -> Initialize -> SendText -> Finish -> final -> Close
-```
+## Use in your application
 
-`Finish` sends an empty text message and waits for final. `Flush` only forces
-buffered output and does not mean completion. The SDK never reconnects and
-replays submitted text automatically.
+- Finish waits for the final event. A transport cleanup error after successful finish does not invalidate the completed synthesis.
+- [Usage guide](USAGE.md): options, audio callbacks, completion, cancellation, timeouts, and errors.
+- [API reference](https://api-docs.myvocal.ai/3687873w0): supported fields and messages.
+- [Character usage](https://api-docs.myvocal.ai/336818975e0).
 
-After a valid final event, a transport close without a normal Close Frame does
-not turn the completed transaction into an SDK error.
+The SDK does not automatically reconnect or replay text.
 
-The service may close with code `1006` or without a Close Frame after final.
-When `Finish` has already succeeded, an error returned by a later `Close` call
-only describes cleanup of an already closed socket and does not invalidate the
-completed synthesis. Do not replay the text based on that cleanup error.
+Licensed under [Apache License 2.0](LICENSE). Dependency notices are in [NOTICE](NOTICE).
